@@ -19,7 +19,7 @@ Kruger Challenge
 
  6. En el filterChain, se determina que los endpoints expuestos con el path /app/** solo tiene acceso Administrator.
  7. Los endpoints que pueden acceder el rol de empleado es /employee/**
- 8. Al crear un empleado, se crea un usuario con el rol de empleado.
+ 8. Al crear un empleado, se crea un usuario con la clave de su cedula y el rol de empleado.
  9. En caso de que no tengan acceso, se les muestra respuesta 403 Forbiden
  ![image](https://user-images.githubusercontent.com/115352466/195006219-f875839b-583a-4ed6-8c33-4c405d55ebdd.png)
 
