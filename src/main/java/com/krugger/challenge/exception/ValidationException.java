@@ -8,7 +8,7 @@ import java.util.stream.Collectors;
 
 public class ValidationException extends RuntimeException {
 
-    private HttpStatus httpStatus;
+    private HttpStatus httpStatus = HttpStatus.PRECONDITION_FAILED;
 
     public ValidationException(String message) {
         super(message);
@@ -20,16 +20,16 @@ public class ValidationException extends RuntimeException {
         this.httpStatus = HttpStatus.EXPECTATION_FAILED;
     }
 
-    public ValidationException(String exString, Set<ConstraintViolation<Object>> constraintViolations) {
+    public ValidationException(String exString, Set<ConstraintViolation<?>> constraintViolations) {
         super(createMessage(exString, constraintViolations));
         this.httpStatus = HttpStatus.PRECONDITION_FAILED;
     }
 
-    private static String createMessage(String exString, Set<ConstraintViolation<Object>> constraintViolations) {
+    private static String createMessage(String exString, Set<ConstraintViolation<?>> constraintViolations) {
         if (constraintViolations == null || constraintViolations.isEmpty())
             return exString == null ? "":exString;
 
-        return String.format("Datos incorrectos: %s",
+        return String.format("Incorrect Data: %s",
                 constraintViolations.stream()
                         .map(ConstraintViolation::getMessage)
                         .collect(Collectors.joining(", "))
@@ -38,6 +38,12 @@ public class ValidationException extends RuntimeException {
 
     public HttpStatus getHttpStatus() {
         return httpStatus;
+    }
+
+    public ExceptionResponse getExceptionResponse() {
+        return ExceptionResponse.builder()
+                .message(getLocalizedMessage())
+                .build();
     }
 
 }

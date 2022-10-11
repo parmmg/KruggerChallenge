@@ -16,6 +16,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -31,17 +32,6 @@ public class UserServiceImpl implements UserService {
     @Autowired
     private UserRepository userRepository;
 
-    public UserServiceImpl(RoleService roleService, UserRepository userRepository, PasswordEncoder passwordEncoder) {
-        this.passwordEncoder = passwordEncoder;
-        this.roleService = roleService;
-        this.userRepository = userRepository;
-    }
-
-    @Override
-    public UserPresenter loginUser(String username, String password) {
-        Optional<User> user = userRepository.findByUserNameAndPassword(username, passwordEncoder.encode(password));
-        return user.map(this::userToUserPresenter).orElse(null);
-    }
 
     @Override
     public UserPresenter createUserByEmployee(Employee employee) {
@@ -50,13 +40,35 @@ public class UserServiceImpl implements UserService {
             throw new ValidationException("User already exist");
         }
         Set<Role> roles = new HashSet<>();
-        roles.add(roleService.findByName("Empleado"));
+        roles.add(roleService.findByName("Employee"));
         return userToUserPresenter(userRepository.save(User.builder()
                 .employee(employee)
                 .userName(employee.getFirstName().replaceAll(" ", "").toLowerCase().trim() + "." + employee.getLastName().replaceAll(" ", "").toLowerCase().trim())
-                .password(passwordEncoder.encode(employee.toString()))
+                .password(passwordEncoder.encode(employee.getDni()))
                 .roles(roles)
                 .build()));
+    }
+
+    @Override
+    public UserPresenter addRoleToUser(UUID userId, UUID roleId) {
+        User user = userRepository.findById(userId).orElseThrow(() -> new ValidationException("User Not Found"));
+        Role role = roleService.findById(roleId);
+        if (!user.getRoles().contains(role)) {
+            user.getRoles().add(role);
+            userRepository.save(user);
+        }
+        return userToUserPresenter(user);
+    }
+
+    @Override
+    public UserPresenter deleteRoleToUser(UUID userId, UUID roleId) {
+        User user = userRepository.findById(userId).orElseThrow(() -> new ValidationException("User Not Found"));
+        Role role = roleService.findById(roleId);
+        if (user.getRoles().contains(role)) {
+            user.getRoles().remove(role);
+            userRepository.save(user);
+        }
+        return userToUserPresenter(user);
     }
 
     @Override
@@ -71,6 +83,11 @@ public class UserServiceImpl implements UserService {
                 .dni(user.getEmployee().getDni())
                 .rolePresenters(rolePresenters)
                 .build();
+    }
+
+    @Override
+    public List<UserPresenter> getUsers() {
+        return userRepository.findAll().stream().filter(user -> user.getEmployee().getActive()).map(this::userToUserPresenter).collect(Collectors.toList());
     }
 
 }

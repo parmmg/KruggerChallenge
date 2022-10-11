@@ -1,6 +1,7 @@
 package com.krugger.challenge.util;
 
 import com.krugger.challenge.entity.*;
+import com.krugger.challenge.presentation.presenter.UserPresenter;
 import com.krugger.challenge.presentation.presenter.VaccinePresenter;
 
 import java.util.ArrayList;
@@ -39,6 +40,16 @@ public class TestData {
         return User.builder()
                 .employee(employeeFake)
                 .employeeId(employeeFake.getId())
+                .userName(employeeFake.getFirstName().replaceAll(" ","").toLowerCase() + "." + employeeFake.getLastName().replaceAll(" ","").toLowerCase())
+                .password(employeeFake.getDni())
+                .build();
+    }
+
+    public UserPresenter userPresenterFake() {
+        Employee employeeFake = employeeFake();
+        return UserPresenter.builder()
+                .dni(employeeFake.getDni())
+                .fullName(employeeFake.getFirstName()+ " " + employeeFake.getLastName())
                 .userName(employeeFake.getFirstName().replaceAll(" ","").toLowerCase() + "." + employeeFake.getLastName().replaceAll(" ","").toLowerCase())
                 .password(employeeFake.getDni())
                 .build();

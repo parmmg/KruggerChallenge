@@ -19,9 +19,11 @@ dependencies {
 	implementation 'org.springframework.boot:spring-boot-starter-data-rest'
 	implementation 'org.springframework.boot:spring-boot-starter-security'
 	implementation 'org.springframework.boot:spring-boot-starter-web'
+	implementation 'com.auth0:java-jwt:4.0.0'
+	implementation 'commons-io:commons-io:2.11.0'
 	implementation 'org.springframework.boot:spring-boot-starter-validation'
 	implementation 'org.liquibase:liquibase-core'
-	implementation 'io.springfox:springfox-swagger-ui:3.0.0'
+	implementation 'io.springfox:springfox-swagger-ui:2.10.5'
 	implementation 'io.springfox:springfox-boot-starter:3.0.0'
 	compileOnly 'org.projectlombok:lombok'
     runtimeOnly 'org.postgresql:postgresql'
@@ -42,4 +44,25 @@ test {
 		exceptionFormat = 'full'
 	}
 	exclude '**/com/krugger/challenge/KruggerChallengeApplicationTest'
+}
+
+sonarqube {
+	properties {
+		property 'sonar.coverage.exclusions', '**/com/krugger/challenge/presentation/presenter/**, **/com/krugger/challenge/presentation/controller/**, **/com/krugger/challenge/KruggerChallengeApplication*, **/com/krugger/challenge/repository/**'
+	}
+}
+
+pitest {
+	threads = 2
+	mutationThreshold = 90
+	outputFormats = ['XML', 'HTML']
+	timestampedReports = false
+	targetClasses = ['com.krugger.challenge.*']
+	excludedClasses = ['com.krugger.challenge.KruggerChallengeApplication',
+					   'com.krugger.challenge.enumerator.**',
+					   'com.krugger.challenge.presentation.presenter.**',
+					   'com.krugger.challenge.presentation.controller.**',
+					   'com.krugger.challenge.entity.**',
+					   'com.krugger.challenge.repository.**']
+	excludedTestClasses = ['*IntegrationTest']
 }

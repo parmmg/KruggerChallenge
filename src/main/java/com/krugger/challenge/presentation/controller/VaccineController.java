@@ -15,7 +15,7 @@ public class VaccineController {
     @Autowired
     VaccineService vaccineService;
 
-    @GetMapping("/getVaccines")
+    @GetMapping("/employee/getVaccines")
     public List<VaccinePresenter> getVaccines() {
         return vaccineService.getVaccines();
     }

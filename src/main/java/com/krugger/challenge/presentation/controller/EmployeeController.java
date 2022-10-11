@@ -1,13 +1,15 @@
 package com.krugger.challenge.presentation.controller;
 
+import com.krugger.challenge.exception.ValidationException;
 import com.krugger.challenge.presentation.presenter.EmployeePresenter;
 import com.krugger.challenge.service.EmployeeService;
-import com.sun.istack.NotNull;
 import lombok.Generated;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.ConstraintViolationException;
+import javax.validation.constraints.NotNull;
 import java.util.Date;
 import java.util.List;
 import java.util.UUID;
@@ -19,9 +21,20 @@ public class EmployeeController {
     @Autowired
     EmployeeService employeeService;
 
-    @PostMapping("/saveEmployee")
+    @GetMapping("/saveEmployee")
     public EmployeePresenter saveEmployee(@RequestBody @NotNull EmployeePresenter employeePresenter) {
-        return employeeService.employeeToEmployeePresenter(employeeService.saveEmployee(employeePresenter));
+        try {
+            return employeeService.employeeToEmployeePresenter(employeeService.saveEmployee(employeePresenter));
+        } catch (Exception e) {
+            Throwable ex = e;
+            while (ex.getCause()!=null && !ex.getCause().equals(ex))
+                ex = ex.getCause();
+            if (ex instanceof ConstraintViolationException) {
+                throw new ValidationException("", ((ConstraintViolationException) ex).getConstraintViolations());
+            } else {
+                throw new ValidationException(ex.getMessage());
+            }
+        }
     }
 
     @GetMapping("/findAllEmployes")

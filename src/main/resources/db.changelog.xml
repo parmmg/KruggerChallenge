@@ -34,6 +34,11 @@
             </column>
             <column name="status" type="varchar(255)"/>
         </createTable>
+        <addUniqueConstraint  columnNames="dni"
+                              constraintName="const_dni"
+                              schemaName="public"
+                              tableName="employees"
+                              validate="true"/>
     </changeSet>
     <changeSet author="parmenia.maldonado" id="2">
         <createTable tableName="vaccines">
@@ -141,7 +146,6 @@
                                  initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION"
                                  referencedColumnNames="id" referencedTableName="employees" validate="true"/>
     </changeSet>
-
     <changeSet author="parmenia.maldonado" id="9">
         <sql dbms="postgresql"
              endDelimiter="\nGO"
@@ -152,7 +156,7 @@
             '1976-08-06 00:00:00', 'Quito', '0961801284', 'VACUNADO');
 
             INSERT INTO public.users (employee_id, "password", user_name)
-            VALUES('fb640de9-3fd3-4d18-8f77-7e98c96a5c9a', '', 'parmenia.maldonado');
+            VALUES('fb640de9-3fd3-4d18-8f77-7e98c96a5c9a', '$2a$10$mINqylinyBCB9JGThL0PSOvPA/gQKl0R1GjieOPsHywBFghP8vavG', 'parmmg');
 
             INSERT INTO public.vaccines (id, "name", description) VALUES('4b4f4d49-38ab-43a1-a627-1df2bfff74c6',
             'Sputnik', 'Sputnik');
@@ -170,10 +174,10 @@
 
             INSERT INTO public.roles
             (id, "name")
-            VALUES('10e2daa6-a1e8-45f4-88fc-429753bd0348', 'Administrador');
+            VALUES('10e2daa6-a1e8-45f4-88fc-429753bd0348', 'Administrator');
             INSERT INTO public.roles
             (id, "name")
-            VALUES('03e3eb0f-3e9e-456b-b48b-6ee234e85362', 'Empleado');
+            VALUES('03e3eb0f-3e9e-456b-b48b-6ee234e85362', 'Employee');
 
             INSERT INTO public.permissions
             (id, domain_action, "name")
@@ -208,7 +212,7 @@
             VALUES('03e3eb0f-3e9e-456b-b48b-6ee234e85362', '1c577ce0-6b28-4381-b535-07acfda36358');
 
             INSERT INTO public.users_roles (user_id, rol_id)
-            VALUES('16946e25-9068-4fd8-8a41-d1fcb84b0ddb', '10e2daa6-a1e8-45f4-88fc-429753bd0348');
+            VALUES('fb640de9-3fd3-4d18-8f77-7e98c96a5c9a', '10e2daa6-a1e8-45f4-88fc-429753bd0348');
 
         </sql>
     </changeSet>

@@ -4,6 +4,7 @@ import com.krugger.challenge.entity.Employee;
 import com.krugger.challenge.entity.User;
 import com.krugger.challenge.exception.ValidationException;
 import com.krugger.challenge.presentation.presenter.UserPresenter;
+import com.krugger.challenge.presentation.presenter.VaccinePresenter;
 import com.krugger.challenge.repository.UserRepository;
 import com.krugger.challenge.service.impl.UserServiceImpl;
 import com.krugger.challenge.util.TestData;
@@ -24,9 +25,6 @@ import static org.mockito.Mockito.when;
 @ExtendWith(MockitoExtension.class)
 public class UserServiceTest {
 
-    @Autowired
-    private PasswordEncoder passwordEncoder;
-
     @InjectMocks
     @Spy
     private UserService userService = new UserServiceImpl();
@@ -37,19 +35,12 @@ public class UserServiceTest {
     private final TestData testData = new TestData();
 
     @Test
-    public void shouldLoginUser() {
-        User user = testData.userFake();
-        user.setPassword(passwordEncoder.encode(user.getEmployee().getDni()));
-        when(userRepository.findByUserNameAndPassword(user.getUserName(), user.getPassword())).thenReturn(Optional.of(user));
-        UserPresenter userPresenter = userService.loginUser(user.getUserName(), user.getEmployee().getDni());
-        Assertions.assertThat(userPresenter).isNotNull();
-    }
-
-    @Test
-    public void shouldNotAllowLoginUser() {
-        when(userRepository.findByUserNameAndPassword("firstname.lastname", "")).thenReturn(Optional.empty());
-        UserPresenter userPresenter = userService.loginUser("firstname.lastname", "");
-        Assertions.assertThat(userPresenter).isNull();
+    public void shouldGetUsers(){
+        List<User> users = new ArrayList<>();
+        users.add(testData.userFake());
+        when(userRepository.findAll()).thenReturn(users);
+        List<UserPresenter> userPresenters = userService.getUsers();
+        Assertions.assertThat(userPresenters).isNotEmpty();
     }
 
     @Test

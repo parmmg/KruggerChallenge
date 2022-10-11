@@ -14,6 +14,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 
 @Service
@@ -43,6 +44,11 @@ public class RoleServiceImpl implements RoleService {
     @Override
     public Role findByName(String name) {
         return roleRepository.findByName(name).orElseThrow(() -> new ValidationException("Role Not Exist"));
+    }
+
+    @Override
+    public Role findById(UUID id) {
+        return roleRepository.findById(id).orElseThrow(() -> new ValidationException("Role Not Exist"));
     }
 
 }

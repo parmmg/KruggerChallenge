@@ -17,8 +17,8 @@ import java.util.UUID;
 @NoArgsConstructor
 public class EmployeePresenter implements Comparable<EmployeePresenter> {
     private UUID id;
-    private String lastName;
     private String firstName;
+    private String lastName;
     private String birthDate;
     private String dni;
     private String address;
