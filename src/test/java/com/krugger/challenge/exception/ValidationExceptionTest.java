@@ -15,7 +15,7 @@ public class ValidationExceptionTest {
     private String exString;
 
     @Mock
-    private Set<ConstraintViolation<Object>> constraintViolations;
+    private Set<ConstraintViolation<?>> constraintViolations;
 
     @Mock
     ValidationException validationException;

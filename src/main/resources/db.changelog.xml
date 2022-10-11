@@ -156,7 +156,7 @@
             '1976-08-06 00:00:00', 'Quito', '0961801284', 'VACUNADO');
 
             INSERT INTO public.users (employee_id, "password", user_name)
-            VALUES('fb640de9-3fd3-4d18-8f77-7e98c96a5c9a', '$2a$10$mINqylinyBCB9JGThL0PSOvPA/gQKl0R1GjieOPsHywBFghP8vavG', 'parmmg');
+            VALUES('fb640de9-3fd3-4d18-8f77-7e98c96a5c9a', '$2a$10$qlTXxxlhpgXd2rduqiyVruXpaQUSZ5Se7.8UOb2.WzlOLEfq5xdZe', 'test');
 
             INSERT INTO public.vaccines (id, "name", description) VALUES('4b4f4d49-38ab-43a1-a627-1df2bfff74c6',
             'Sputnik', 'Sputnik');

@@ -33,11 +33,6 @@ public class EmployeeServiceImpl implements EmployeeService {
 
     @Override
     public Employee saveEmployee(EmployeePresenter employeePresenter) {
-        try {
-
-        } catch (Exception e) {
-
-        }
         SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         Date date;
         try {
@@ -67,14 +62,9 @@ public class EmployeeServiceImpl implements EmployeeService {
             Set<EmployeeVaccine> employeeVaccines = new HashSet<>();
             Employee finalEmployee = employee;
             employeePresenter.getEmployeeVaccinePresenters().forEach(employeeVaccinePresenter -> {
-//                EmployeeVaccine employeeVaccine = employeeVaccineService.
-//
-//                employeeVaccines.add();
-//
-            });
-            employeeVaccines.forEach(employeeVaccine -> {
+                EmployeeVaccine employeeVaccine = employeeVaccineService.employeeVaccinePresenterToEmployeeVaccine(employeeVaccinePresenter);
                 employeeVaccine.setEmployee(finalEmployee);
-//                employeeVaccineService.saveEmployeeVaccine(employeeVaccine);
+                employeeVaccineService.saveEmployeeVaccine(employeeVaccinePresenter);
             });
             employee.setEmployeeVaccines(employeeVaccines);
         }
@@ -152,7 +142,6 @@ public class EmployeeServiceImpl implements EmployeeService {
 
     @Override
     public List<EmployeePresenter> getEmployeesByStatus(String status) {
-        List<EmployeePresenter> employeesPresenter = new ArrayList<>();
         Status[] vaccineStatus;
         try {
             vaccineStatus = status==null || status.isEmpty() ? Status.values() : new Status[]{Status.valueOf(status)};
@@ -162,7 +151,7 @@ public class EmployeeServiceImpl implements EmployeeService {
         List<Employee> employees = employeeRepository.findByStatus(vaccineStatus);
         List<EmployeePresenter> employeePresenters = new ArrayList<>();
         employees.stream().filter(Employee::getActive).forEach(employee -> employeePresenters.add(employeeToEmployeePresenter(employee)));
-        return employeesPresenter;
+        return employeePresenters;
     }
 
     @Override
@@ -172,4 +161,14 @@ public class EmployeeServiceImpl implements EmployeeService {
         employees.stream().filter(Employee::getActive).forEach(employee -> employeePresenters.add(employeeToEmployeePresenter(employee)));
         return employeePresenters;
     }
+
+    @Override
+    public Set<EmployeePresenter> getEmployeesByVaccineId(UUID vaccineId) {
+        List<Employee> employees = employeeRepository.findEmployeesByVaccineId(vaccineId);
+        Set<EmployeePresenter> employeePresenters = new HashSet<>();
+        employees.stream().filter(Employee::getActive).forEach(employee -> employeePresenters.add(employeeToEmployeePresenter(employee)));
+        return employeePresenters;
+    }
+
+
 }

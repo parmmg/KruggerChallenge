@@ -15,6 +15,7 @@ import java.util.UUID;
 public class EmployeeVaccinePresenter {
 
     private UUID id;
+    private EmployeePresenter employeePresenter;
     private VaccinePresenter vaccinePresenter;
     private int dose;
     private String date;

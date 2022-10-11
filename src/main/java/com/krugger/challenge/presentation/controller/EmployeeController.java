@@ -12,6 +12,7 @@ import javax.validation.ConstraintViolationException;
 import javax.validation.constraints.NotNull;
 import java.util.Date;
 import java.util.List;
+import java.util.Set;
 import java.util.UUID;
 
 @Generated
@@ -21,7 +22,7 @@ public class EmployeeController {
     @Autowired
     EmployeeService employeeService;
 
-    @GetMapping("/saveEmployee")
+    @GetMapping("/employee/saveEmployee")
     public EmployeePresenter saveEmployee(@RequestBody @NotNull EmployeePresenter employeePresenter) {
         try {
             return employeeService.employeeToEmployeePresenter(employeeService.saveEmployee(employeePresenter));
@@ -37,40 +38,46 @@ public class EmployeeController {
         }
     }
 
-    @GetMapping("/findAllEmployes")
+    @GetMapping("/app/findAllEmployees")
     public List<EmployeePresenter> findAll() {
         return employeeService.findAll();
     }
 
 
-    @GetMapping("/getEmployeeByDni")
+    @GetMapping("/app/getEmployeeByDni")
     public EmployeePresenter getEmployeeByDni(@RequestParam @NotNull String dni)  {
         return employeeService.getEmployeeByDni(dni);
     }
 
-    @GetMapping("/getEmployeeById")
+    @GetMapping("/app/getEmployeeById")
     public EmployeePresenter getEmployeeById(@RequestParam @NotNull UUID employeeId)  {
         return employeeService.getEmployeeById(employeeId);
     }
 
-    @GetMapping("/deleteEmployee")
+    @GetMapping("/app/deleteEmployee")
     public String deleteEmployee(@RequestParam @NotNull UUID employeeId) {
         return employeeService.delete(employeeId);
     }
 
-    @GetMapping("/findEmployessByStatus")
+    @GetMapping("/app/findEmployeesByStatus")
     public List<EmployeePresenter> getEmployeesByStatus(@RequestParam(value = "status") String status) {
         return employeeService.getEmployeesByStatus(status);
     }
 
-    @GetMapping("/findEmployessByVaccineDate")
+    @GetMapping("/app/findEmployeesByVaccineId")
+    public Set<EmployeePresenter> getEmployeesByVaccineId(
+            @RequestParam @NotNull UUID vaccineId)  {
+        return employeeService.getEmployeesByVaccineId(vaccineId);
+    }
+
+    @GetMapping("/app/findEmployeesByVaccineDate")
     public List<EmployeePresenter> getEmployeesByVaccineDate(
             @RequestParam(value = "initDate") @DateTimeFormat(pattern = "yyyy-MM-dd") Date initDate,
             @RequestParam(value = "endDate") @DateTimeFormat(pattern = "yyyy-MM-dd") Date endDate)  {
         return employeeService.getEmployeesByVaccineDate(initDate, endDate);
     }
 
-    @GetMapping("/searchEmployees")
+    @GetMapping("/app/searchEmployees")
     public List<EmployeePresenter> searchEmployees(@RequestParam(value = "value", required = false) String value,
                                                    @RequestParam(value = "initDate", required = false) @DateTimeFormat(pattern = "yyyy-MM-dd") Date initDate,
                                                    @RequestParam(value = "endDate", required = false) @DateTimeFormat(pattern = "yyyy-MM-dd") Date endDate,

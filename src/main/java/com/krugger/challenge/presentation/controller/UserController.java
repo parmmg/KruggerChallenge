@@ -19,13 +19,13 @@ public class UserController {
     @Autowired
     private UserService userService;
 
-    @GetMapping("/addRoleToUser")
+    @GetMapping("/app/addRoleToUser")
     public UserPresenter addRoleToUser (@RequestParam @NotNull @NotBlank UUID userId,
                                         @RequestParam @NotNull @NotBlank UUID roleId) {
         return userService.addRoleToUser(userId, roleId);
     }
 
-    @GetMapping("/deleteRoleToUser")
+    @GetMapping("/app/deleteRoleToUser")
     public UserPresenter deleteRoleToUser (@RequestParam @NotNull @NotBlank UUID userId,
                                         @RequestParam @NotNull @NotBlank UUID roleId) {
         return userService.addRoleToUser(userId, roleId);

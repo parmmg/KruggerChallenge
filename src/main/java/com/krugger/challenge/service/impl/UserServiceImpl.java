@@ -35,18 +35,20 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public UserPresenter createUserByEmployee(Employee employee) {
-        Optional<User> user = userRepository.findById(employee.getId());
-        if (user.isPresent()) {
+        Optional<User> userOptional = userRepository.findById(employee.getId());
+        if (userOptional.isPresent()) {
             throw new ValidationException("User already exist");
         }
         Set<Role> roles = new HashSet<>();
         roles.add(roleService.findByName("Employee"));
-        return userToUserPresenter(userRepository.save(User.builder()
+        User user = User.builder()
                 .employee(employee)
                 .userName(employee.getFirstName().replaceAll(" ", "").toLowerCase().trim() + "." + employee.getLastName().replaceAll(" ", "").toLowerCase().trim())
                 .password(passwordEncoder.encode(employee.getDni()))
                 .roles(roles)
-                .build()));
+                .build();
+        user = userRepository.save(user);
+        return userToUserPresenter(user);
     }
 
     @Override
@@ -73,6 +75,8 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public UserPresenter userToUserPresenter(User user) {
+        if (user==null)
+            return null;
         List<RolePresenter> rolePresenters = new ArrayList<>();
         user.getRoles().forEach(role -> rolePresenters.add(roleService.roleToRolePresenter(role)));
         return UserPresenter.builder()

@@ -5,6 +5,7 @@ import com.krugger.challenge.entity.Employee;
 
 import java.util.Date;
 import java.util.List;
+import java.util.Set;
 import java.util.UUID;
 
 public interface EmployeeService {
@@ -27,4 +28,5 @@ public interface EmployeeService {
 
     List<EmployeePresenter> getEmployeesByVaccineDate(Date initDate, Date endDate);
 
+    Set<EmployeePresenter> getEmployeesByVaccineId(UUID vaccineId);
 }

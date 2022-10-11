@@ -34,4 +34,11 @@ public interface EmployeeRepository extends CrudRepository<Employee, UUID> {
 
     Optional<Employee> findByDni(String dni);
 
+    @Query("SELECT e " +
+            "FROM Employee e " +
+            "JOIN e.employeeVaccines ev " +
+            "JOIN ev.vaccine v " +
+            "WHERE v.id = :id")
+    List<Employee> findEmployeesByVaccineId(UUID id);
+
 }
